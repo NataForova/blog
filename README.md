@@ -1,2 +1,2 @@
 # blog
-blop application
+blog application
