@@ -1,0 +1,6 @@
+databaseChangeLog:
+    - include:
+        id: "1"
+        author: "shchiptsova.n"
+        file: changelogs/init.sql
+        relativeToChangelogFile: true
