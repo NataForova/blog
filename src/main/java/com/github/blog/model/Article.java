@@ -21,11 +21,8 @@ public class Article {
     private Long id;
     private String title;
     private String content;
-    @Column(name = "author_id")
+    @Column(name = "user_id")
     private Long authorId;
-    /*@ManyToOne(targetEntity = Author.class)
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private Author author;*/
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
