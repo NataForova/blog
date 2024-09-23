@@ -44,30 +44,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        final String jwt = authHeader.substring(7);
+        final String userEmail = jwtService.extractUsername(jwt);
 
-        try {
-            final String jwt = authHeader.substring(7);
-            final String userEmail = jwtService.extractUsername(jwt);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (userEmail != null && authentication == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-            if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-            filterChain.doFilter(request, response);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
         }
+        filterChain.doFilter(request, response);
     }
 }
