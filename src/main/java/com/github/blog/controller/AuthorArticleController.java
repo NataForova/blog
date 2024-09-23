@@ -4,6 +4,8 @@ import com.github.blog.model.Article;
 import com.github.blog.model.ArticleInfo;
 import com.github.blog.model.CreateArticleRequest;
 import com.github.blog.service.ArticleService;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +16,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import static io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP;
+
 
 @RestController
 @RequestMapping("/admin/articles")
+@Tag(name = "Admin article controller", description = "API for manage articles in admin mode")
+@SecurityScheme(
+        name = "bearerAuth",
+        type = HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
 public class AuthorArticleController {
     private final ArticleService articleService;
 

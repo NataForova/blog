@@ -3,6 +3,8 @@ package com.github.blog.controller;
 import com.github.blog.model.Article;
 import com.github.blog.model.ArticleInfo;
 import com.github.blog.service.ArticleService;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/articles")
+@Tag(name = "Guest article Controller", description = "API for getting articles in guest mode")
 public class ClientArticleController {
     private final ArticleService articleService;
 
