@@ -81,9 +81,7 @@ public class AuthorArticleController {
     @DeleteMapping(value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteArticle(@AuthenticationPrincipal UserDetails userDetails,
-                                                 @RequestBody CreateArticleRequest request,
-                                                 @PathVariable Long id) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticleById(id);
         return ResponseEntity.ok().build();
     }
