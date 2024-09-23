@@ -28,8 +28,8 @@ create table roles (
     name varchar(255)
 );
 
-insert into roles (id, name) values (1, 'ROLE_ADMIN');
-insert into roles (id, name) values (2, 'ROLE_USER');
+insert into roles (id, name) values (1, 'ROLE_AUTHOR');
+insert into roles (id, name) values (2, 'ROLE_GUEST');
 
 create table users_roles (
     user_id bigint,

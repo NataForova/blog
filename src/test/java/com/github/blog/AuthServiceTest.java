@@ -1,14 +1,12 @@
 package com.github.blog;
 
 import com.github.blog.exception.EmailAlreadyInUseException;
-import com.github.blog.exception.InvalidEmail;
+import com.github.blog.exception.InvalidEmailException;
 import com.github.blog.exception.PasswordConstraintException;
 import com.github.blog.model.User;
 import com.github.blog.model.auth.RegisterUserRequest;
 import com.github.blog.model.auth.Role;
 import com.github.blog.service.AuthService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -92,7 +90,7 @@ public class AuthServiceTest {
             authService.signup(registerUserRequest);
             fail();
         } catch (RuntimeException e) {
-            assertThat(e).isInstanceOf(InvalidEmail.class);
+            assertThat(e).isInstanceOf(InvalidEmailException.class);
         }
     }
 

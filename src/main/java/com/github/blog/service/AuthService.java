@@ -1,7 +1,7 @@
 package com.github.blog.service;
 
 import com.github.blog.exception.EmailAlreadyInUseException;
-import com.github.blog.exception.InvalidEmail;
+import com.github.blog.exception.InvalidEmailException;
 import com.github.blog.exception.PasswordConstraintException;
 import com.github.blog.model.User;
 import com.github.blog.model.auth.LoginRequest;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
-    private static final String DEFAULT_ROLE_NAME = "ROLE_USER";
+    private static final String DEFAULT_ROLE_NAME = "ROLE_AUTHOR";
 
     private static final int MIN_PASSWORD_LENGTH = 8;
 
@@ -73,7 +73,7 @@ public class AuthService {
                 )
         );
         var optionalUser = userRepository.findByEmail(request.getEmail());
-        if (optionalUser.isPresent()) {
+        if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("Couldn't find user with email" + request.getEmail());
         }
 
@@ -94,7 +94,7 @@ public class AuthService {
         var email = request.getEmail();
 
         if (!EMAIL_PATTERN.matcher(email).matches()) {
-            throw new InvalidEmail("Invalid email format");
+            throw new InvalidEmailException("Invalid email format");
         }
 
         var optionalUser = userRepository.findByEmail(email);

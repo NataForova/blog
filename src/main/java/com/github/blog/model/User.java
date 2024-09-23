@@ -1,5 +1,6 @@
 package com.github.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.blog.model.auth.Role;
 import jakarta.persistence.*;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
     private Long id;
     private String name;
     private String email;
+    @JsonIgnore
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -41,11 +43,11 @@ public class User implements UserDetails {
     )
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
-
     private LocalDateTime registrationDate;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Fetch(value = FetchMode.SUBSELECT)
+    @JsonBackReference
     private List<Article> articles;
 
     @Override
