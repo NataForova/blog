@@ -9,3 +9,8 @@ databaseChangeLog:
         author: "shchiptsova.n"
         file: changelogs/update_23_09_24.sql
         relativeToChangelogFile: true
+    - include:
+          id: "2"
+          author: "shchiptsova.n"
+          file: changelogs/update_25_09_24.sql
+          relativeToChangelogFile: true

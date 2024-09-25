@@ -4,6 +4,7 @@ import com.github.blog.exception.ResourceNotFoundException;
 import com.github.blog.model.Article;
 import com.github.blog.model.ArticleInfo;
 import com.github.blog.model.CreateArticleRequest;
+import com.github.blog.model.event.ChangeType;
 import com.github.blog.repository.ArticleRepository;
 import com.github.blog.repository.UserRepository;
 import io.jsonwebtoken.lang.Assert;
@@ -17,12 +18,15 @@ import java.time.LocalDateTime;
 @Service
 public class ArticleService {
     private final static int MAX_TITLE_LENGTH = 200;
+    private final ArticleEventService articleEventService;
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
 
 
-    public ArticleService(ArticleRepository articleRepository,
+    public ArticleService(ArticleEventService articleEventService,
+                          ArticleRepository articleRepository,
                           UserRepository userRepository) {
+        this.articleEventService = articleEventService;
         this.articleRepository = articleRepository;
         this.userRepository = userRepository;
     }
@@ -66,15 +70,23 @@ public class ArticleService {
         if (optionalAuthor.isEmpty()) {
             throw new ResourceNotFoundException("User not found");
         }
+        var author = optionalAuthor.get();
         var article = new Article()
                 .setTitle(request.getTitle())
                 .setContent(request.getContent())
-                .setAuthor(optionalAuthor.get())
+                .setAuthor(author)
                 .setCreatedAt(LocalDateTime.now())
                 .setUpdatedAt(LocalDateTime.now())
                 .setIsDeleted(false);
 
-        return articleRepository.save(article);
+        var savedArticle = articleRepository.save(article);
+
+        articleEventService.saveArticleEvent(savedArticle.getId(),
+                request,
+                author,
+                ChangeType.CREATED);
+
+        return savedArticle;
     }
 
     @Transactional
@@ -99,7 +111,14 @@ public class ArticleService {
         }
         article.setUpdatedAt(LocalDateTime.now());
 
-        return articleRepository.save(article);
+        var updated = articleRepository.save(article);
+
+        articleEventService.saveArticleEvent(articleId,
+                request,
+                optionalAuthor.get(),
+                ChangeType.UPDATED);
+
+        return updated;
     }
 
     @Transactional
@@ -111,6 +130,10 @@ public class ArticleService {
         var article = optionalArticle.get();
         article.setIsDeleted(true);
         articleRepository.save(article);
+        articleEventService.saveArticleEvent(articleId,
+                null,
+                article.getAuthor(),
+                ChangeType.DELETED);
     }
 
     private void validateArticle(CreateArticleRequest request) {

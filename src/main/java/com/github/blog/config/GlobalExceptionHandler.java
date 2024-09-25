@@ -18,21 +18,18 @@ import java.nio.file.AccessDeniedException;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // Handle Forbidden (403)
     @ExceptionHandler(value = { AccessDeniedException.class, ExpiredJwtException.class })
     protected ResponseEntity<Object> handleForbidden(RuntimeException ex, WebRequest request) {
         String body = "Access is forbidden: " + ex.getMessage();
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
-    // Handle Not Found (404)
     @ExceptionHandler(ResourceNotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(ResourceNotFoundException ex, WebRequest request) {
         String body = "Resource not found: " + ex.getMessage();
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    // Handle Not Found (401)
     @ExceptionHandler(value = {InvalidEmailException.class,
             PasswordConstraintException.class,
             IllegalArgumentException.class})
@@ -41,7 +38,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    // Handle Internal Server Error (500)
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleInternalServerError(Exception ex, WebRequest request) {
         String body = "An internal server error occurred.";
