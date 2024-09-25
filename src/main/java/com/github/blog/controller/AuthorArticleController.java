@@ -51,7 +51,7 @@ public class AuthorArticleController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Article> getArticle(@AuthenticationPrincipal UserDetails userDetails,
                                               @PathVariable Long id) {
-        var article = articleService.findAuthorsArticleById(id);
+        var article = articleService.findArticleById(id);
         return ResponseEntity.ok(article);
     }
 

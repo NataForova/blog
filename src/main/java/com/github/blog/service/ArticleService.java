@@ -8,6 +8,8 @@ import com.github.blog.model.event.ChangeType;
 import com.github.blog.repository.ArticleRepository;
 import com.github.blog.repository.UserRepository;
 import io.jsonwebtoken.lang.Assert;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,10 +37,12 @@ public class ArticleService {
         return articleRepository.findAllInfo(pageable);
     }
 
+    @Cacheable(value = "pagedArticles", key = "'page_' + #pageable.pageNumber + '_size_' + #pageable.pageSize")
     public Page<ArticleInfo> findAllAuthorsArticles(String authorEmail, Pageable pageable) {
         return articleRepository.findByAuthor_Email(authorEmail, pageable);
     }
 
+    @Cacheable(value = "articles", key = "#id")
     public Article findArticleById(Long id) {
         var optionalArticle = articleRepository.findById(id);
         if (optionalArticle.isEmpty()) {
@@ -51,19 +55,8 @@ public class ArticleService {
         return article;
     }
 
-    public Article findAuthorsArticleById(Long id) {
-        var optionalArticle = articleRepository.findById(id);
-        if (optionalArticle.isEmpty()) {
-            throw new ResourceNotFoundException("Article not found");
-        }
-        var article = optionalArticle.get();
-        if (article.getIsDeleted()) {
-            throw new ResourceNotFoundException("Article is deleted");
-        }
-        return article;
-    }
-
     @Transactional
+    @CacheEvict(value = {"articles", "pagedArticles"}, allEntries = true)
     public Article createNewArticle(String authorEmail, CreateArticleRequest request) {
         validateArticle(request);
         var optionalAuthor = userRepository.findByEmail(authorEmail);
@@ -90,6 +83,7 @@ public class ArticleService {
     }
 
     @Transactional
+    @CacheEvict(value = {"articles", "pagedArticles"}, allEntries = true)
     public Article updateArticle(String authorEmail, Long articleId, CreateArticleRequest request) {
         Assert.notNull(articleId, "Article id must not be null");
         var optionalAuthor = userRepository.findByEmail(authorEmail);
@@ -122,6 +116,7 @@ public class ArticleService {
     }
 
     @Transactional
+    @CacheEvict(value = {"articles", "pagedArticles"}, allEntries = true)
     public void deleteArticleById(Long articleId) {
         var optionalArticle = articleRepository.findById(articleId);
         if (optionalArticle.isEmpty()) {
