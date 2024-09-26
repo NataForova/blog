@@ -1,5 +1,6 @@
 package com.github.blog.service;
 
+import com.github.blog.exception.ArticleAccessDeniedException;
 import com.github.blog.exception.ResourceNotFoundException;
 import com.github.blog.model.Article;
 import com.github.blog.model.ArticleInfo;
@@ -95,7 +96,12 @@ public class ArticleService {
         if (articleOptional.isEmpty()) {
             throw new ResourceNotFoundException("Article not found");
         }
+
         var article = articleOptional.get();
+
+        if (!article.getAuthor().getEmail().equals(authorEmail)) {
+            throw new ArticleAccessDeniedException("User don't have access to article");
+        }
 
         if (request.getTitle() != null && !request.getTitle().isBlank()) {
             article.setTitle(request.getTitle());

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.nio.file.AccessDeniedException;
+import com.github.blog.exception.ArticleAccessDeniedException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 
-    @ExceptionHandler(value = { AccessDeniedException.class, ExpiredJwtException.class })
+    @ExceptionHandler(value = { ArticleAccessDeniedException.class, ExpiredJwtException.class, ArticleAccessDeniedException.class})
     protected ResponseEntity<Object> handleForbidden(RuntimeException ex, WebRequest request) {
         String body = "Access is forbidden: " + ex.getMessage();
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.FORBIDDEN, request);

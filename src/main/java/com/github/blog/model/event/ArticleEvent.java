@@ -1,5 +1,6 @@
 package com.github.blog.model.event;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,5 +29,6 @@ public class ArticleEvent {
     @Column(name = "changes")
     private List<Changes> changes;
     private LocalDateTime createdAt;
+    @JsonIgnore
     private Boolean isSent;
 }

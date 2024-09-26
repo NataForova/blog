@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaEventProducerService {
 
-    @Value("${kafka.event.topic.name}")
+    @Value("${kafka.event.topic.name:default}")
     private String topic;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
