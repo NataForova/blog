@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+    app:
+      image: blog
+      ports:
+        - "8080:8080"
+      depends_on:
+        - db
+      env_file:
+        - .env
+
+    db:
+      image: postgres:latest
+      restart: always
+      environment:
+        POSTGRES_DB: blog
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres

@@ -56,7 +56,7 @@ public class AuthServiceTest {
         assertThat(createdUser.getEmail()).isEqualTo(expectedResponse.getEmail());
         assertThat(createdUser.getRoles().size()).isEqualTo(1);
         var role = createdUser.getRoles();
-        assertThat(role.iterator().next().getName()).isEqualTo("ROLE_USER");
+        assertThat(role.iterator().next().getName()).isEqualTo("ROLE_AUTHOR");
     }
 
     @Test
