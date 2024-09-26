@@ -4,6 +4,7 @@ import com.github.blog.model.Article;
 import com.github.blog.model.ArticleInfo;
 import com.github.blog.model.CreateArticleRequest;
 import com.github.blog.service.ArticleService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ public class AuthorArticleController {
         this.articleService = articleService;
     }
 
+    @Operation(summary = "Get all article of author")
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ArticleInfo>> getAllArticles(@RequestParam(defaultValue = "0") int page,
@@ -46,6 +48,7 @@ public class AuthorArticleController {
         return ResponseEntity.ok(articlePage);
     }
 
+    @Operation(summary = "Get certain article of author by id")
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,6 +58,7 @@ public class AuthorArticleController {
         return ResponseEntity.ok(article);
     }
 
+    @Operation(summary = "Create a new article")
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +69,7 @@ public class AuthorArticleController {
         return ResponseEntity.ok(article);
     }
 
+    @Operation(summary = "Update an article")
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
     @PutMapping(value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -77,6 +82,7 @@ public class AuthorArticleController {
         return ResponseEntity.ok(article);
     }
 
+    @Operation(summary = "Delete an article by id")
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
     @DeleteMapping(value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,

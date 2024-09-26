@@ -15,11 +15,4 @@ public class HealthCheckController {
     public ResponseEntity<Void> healthCheck() {
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/test")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> test(@AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
-        return ResponseEntity.ok("Hello, " + email);
-    }
 }

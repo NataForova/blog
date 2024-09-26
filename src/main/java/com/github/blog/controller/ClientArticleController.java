@@ -3,6 +3,7 @@ package com.github.blog.controller;
 import com.github.blog.model.Article;
 import com.github.blog.model.ArticleInfo;
 import com.github.blog.service.ArticleService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ public class ClientArticleController {
         this.articleService = articleService;
     }
 
+    @Operation(summary = "Get all articles in system")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ArticleInfo>> getAllArticles(@RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "100") int size) {
@@ -30,6 +32,7 @@ public class ClientArticleController {
         return ResponseEntity.ok(articlePage);
     }
 
+    @Operation(summary = "Get an articles by id")
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticle(@PathVariable Long id) {
         var article = articleService.findArticleById(id);

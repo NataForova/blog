@@ -51,7 +51,7 @@ public class ArticleService {
         }
         var article = optionalArticle.get();
         if (article.getIsDeleted()) {
-            throw new ResourceNotFoundException("Article is deleted");
+            throw new ResourceNotFoundException("Article was deleted");
         }
         return article;
     }

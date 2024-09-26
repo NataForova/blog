@@ -204,7 +204,7 @@ public class ArticleServiceTest {
             fail();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(ResourceNotFoundException.class);
-            assertThat(e.getMessage()).isEqualTo("Article is deleted");
+            assertThat(e.getMessage()).isEqualTo("Article was deleted");
         }
 
     }
